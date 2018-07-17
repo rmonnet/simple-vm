@@ -9,7 +9,7 @@ The project is published under the MIT license.
 ## Reference
 
 Terence Parr's talk about building a Virtual Machine can be found
-[here] (https://www.youtube.com/watch?v=OjaAToVkoTw)
+[here](https://www.youtube.com/watch?v=OjaAToVkoTw)
 and the associated slides can be found [here](https://www.slideshare.net/parrt/how-to-build-a-virtual-machine).
 
 ## Summary
