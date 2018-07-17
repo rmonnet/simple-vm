@@ -26,6 +26,11 @@ func NewVM(code []int, main int, datasize int) *VM {
 	vm.data = make([]int, datasize)
 	vm.stack = make([]int, stackSize)
 	vm.sp = -1
+	// frame pointer only really makes sense inside a CALL
+	// starting at -1 is like pretenting the main program
+	// is within a call (but no argument or return values are
+	// available).
+	vm.fp = -1
 	return vm
 }
 
@@ -56,7 +61,8 @@ func (vm *VM) dumpMemory() {
 	}
 }
 
-func (vm *VM) cpu() {
+// Exec executes the program loaded in the Virtual Machine
+func (vm *VM) Exec() {
 	for vm.ip < len(vm.code) {
 		// fetch
 		opcode := vm.fetch()
@@ -88,6 +94,14 @@ func (vm *VM) cpu() {
 				cond = 1
 			}
 			vm.push(cond)
+		case IEQ:
+			r := vm.pop()
+			l := vm.pop()
+			cond := 0
+			if l == r {
+				cond = 1
+			}
+			vm.push(cond)
 		case BRF:
 			cond := vm.pop()
 			addr := vm.fetch()
@@ -103,6 +117,26 @@ func (vm *VM) cpu() {
 		case BR:
 			addr := vm.fetch()
 			vm.ip = addr
+		case IADD:
+			r := vm.pop()
+			l := vm.pop()
+			vm.push(l + r)
+		case ISUB:
+			r := vm.pop()
+			l := vm.pop()
+			vm.push(l - r)
+		case IMUL:
+			r := vm.pop()
+			l := vm.pop()
+			vm.push(l * r)
+		case POP:
+			vm.pop()
+		case LOAD:
+			i := vm.fetch()
+			vm.push(vm.stack[vm.fp+i])
+		case STORE:
+			i := vm.fetch()
+			vm.stack[vm.fp+i] = vm.pop()
 		default:
 			panic(fmt.Sprintf("unrecognized opcode: %d", opcode))
 		}
