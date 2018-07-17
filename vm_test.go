@@ -1,9 +1,22 @@
 package vm
 
+import (
+	"testing"
+)
+
+func Test_badopcode(t *testing.T) {
+	defer func() {
+		recover()
+	}()
+	pgm := []int{66}
+	vm := NewVM(pgm, 0, 0)
+	vm.Exec()
+	t.Errorf("bad opcode didn't cause a panic")
+}
 func ExampleVM_halt() {
-	hello := []int{
+	pgm := []int{
 		HALT}
-	vm := NewVM(hello, 0, 0)
+	vm := NewVM(pgm, 0, 0)
 	vm.SetTrace(true)
 	vm.Exec()
 	// Output:
@@ -55,6 +68,20 @@ func ExampleVM_brt() {
 	vm := NewVM(pgm, 0, 0)
 	vm.Exec()
 	// Output: 5
+}
+
+func ExampleVM_brt2() {
+	pgm := []int{
+		ICONST, 1, // 0
+		BRT, 8, // 2
+		ICONST, 5, // 4
+		BR, 10, // 6
+		ICONST, 10, // 8
+		PRINT, // 10
+	}
+	vm := NewVM(pgm, 0, 0)
+	vm.Exec()
+	// Output: 10
 }
 
 func ExampleVM_brf() {

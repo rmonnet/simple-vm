@@ -42,10 +42,8 @@ func (vm *VM) SetTrace(on bool) {
 func (vm *VM) disassemble(opcode int) {
 	inst := Instructions[opcode]
 	fmt.Printf("%04d: %s", vm.ip-1, inst.Name())
-	if inst.NumArgs() == 1 {
-		fmt.Printf(" %d", vm.code[vm.ip])
-	} else if inst.NumArgs() == 2 {
-		fmt.Printf(" %d %d", vm.code[vm.ip], vm.code[vm.ip+1])
+	for i := 0; i < inst.NumArgs(); i++ {
+		fmt.Printf(" %d", vm.code[vm.ip+i])
 	}
 	fmt.Printf(" %v", vm.stack[0:vm.sp+1])
 	fmt.Println("")
