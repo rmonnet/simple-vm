@@ -12,6 +12,11 @@ Terence Parr's talk about building a Virtual Machine can be found
 [here](https://www.youtube.com/watch?v=OjaAToVkoTw)
 and the associated slides can be found [here](https://www.slideshare.net/parrt/how-to-build-a-virtual-machine).
 
+Note: In Terence's slide #11, during the call fp+0 contains the previous stack pointer,
+I add to store the instruction pointer instead. The difference comes from Terence storing
+each function in its own code segment, while I implemented a more primitive VM where
+all functions are in the same code segment.
+
 ## Summary
 
 The project demonstrates a subset of a Virtual Machine (integer operations)
@@ -51,7 +56,7 @@ The bytecodes are as follow:
 - LOAD i ( -- v)
     - loads the ith value from the local context (indicated by the frame pointer) on top of the stack. The ith value is a positive or negative offset from the frame pointer (fp).
     - the local context is setup during a subroutine call. It is stored on the stack as follow:
-        - fp+0: previous stack pointer
+        - fp+0: previous instruction pointer
         - fp-1: previous frame pointer
         - fp-2: subroutine number of arguments
         - fp-3: nth argument of the subroutine (before call)
@@ -69,6 +74,7 @@ The bytecodes are as follow:
     - pops and discards the top of the stack
 - CALL addr ( -- )
     - calls the subroutine at the addr
+    - assume the subroutine will have one single return value on the top of the stack
 - RET ( -- )
     - returns from a function call
 - HALT ( -- )

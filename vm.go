@@ -135,6 +135,28 @@ func (vm *VM) Exec() {
 		case STORE:
 			i := vm.fetch()
 			vm.stack[vm.fp+i] = vm.pop()
+		case CALL:
+			addr := vm.fetch()
+			// assuming top of the stack contains: arg1, arg2, ..., nargs
+			// store previous fp
+			vm.push(vm.fp)
+			// store old instruction pointer
+			vm.push(vm.ip)
+			// this is now the frame pointer
+			vm.fp = vm.sp
+			// jump to the subroutine
+			vm.ip = addr
+		case RET:
+			// save the frame pointer, the return value is at fp+1
+			curFp := vm.fp
+			// restore the instruction pointer
+			vm.ip = vm.stack[curFp]
+			// restore the frame point
+			vm.fp = vm.stack[curFp-1]
+			// rewind the stack to fp -3 -nargs (i.e. pop ip, fp, nargs,...,arg1)
+			vm.sp = curFp - 3 - vm.stack[curFp-2]
+			// copy the return value on top of the stack
+			vm.push(vm.stack[curFp+1])
 		default:
 			panic(fmt.Sprintf("unrecognized opcode: %d", opcode))
 		}

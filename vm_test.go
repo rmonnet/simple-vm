@@ -184,6 +184,55 @@ func ExampleVM_imul() {
 	// Output: 30
 }
 
+func ExampleVM_call() {
+	iN := -3    // second arg for power(x, n) at fp-3
+	iX := -4    // first arg for power(x, n) at fp-4
+	iRes := 1   // local 1 for power(x, n) at fp+1
+	iIdx := 2   // local 2 for power(x, n) at fp+2
+	lPow := 0   // entry point for power(x, n)
+	lInc := 13  // label for x increment
+	lTest := 4  // label for power test
+	lMain := 29 // label for the main entry point
+	pgm := []int{
+		// lPow - pow(x, n)
+		ICONST, 1, // 0 - iRes (local 1)
+		ICONST, 0, // 2 - iIdx (local 2)
+		// lTest
+		LOAD, iIdx, // 4
+		LOAD, iN, // 6
+		ILT,       // 8
+		BRT, lInc, // 9
+		POP, // 11 -remove local 2 from stack
+		RET, // 12
+		// lInc
+		LOAD, iX, // 13
+		LOAD, iRes, // 15
+		IMUL,        // 17
+		STORE, iRes, // 18
+		LOAD, iIdx, // 20
+		ICONST, 1, // 22
+		IADD,        // 24
+		STORE, iIdx, // 25
+		BR, lTest, // 27
+		// lMain - main entry point
+		ICONST, 2, // 29 - x=2
+		ICONST, 3, // 31 - n=3
+		ICONST, 2, // 33 - nargs = 2
+		CALL, lPow, // 35 - power(2,3)
+		PRINT,     // 37
+		ICONST, 3, // 39 - x=3
+		ICONST, 4, // 41 - n=4
+		ICONST, 2, // 43 - nargs = 2
+		CALL, lPow, // 45 - power(3,4)
+		PRINT, // 81
+	}
+	vm := NewVM(pgm, lMain, 0)
+	vm.Exec()
+	// Output:
+	// 8
+	// 81
+}
+
 func ExampleVM_loop() {
 	// global variables
 	gN := 0
