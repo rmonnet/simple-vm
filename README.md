@@ -4,7 +4,7 @@ A simple Virtual Machine (in go) based on Terence Parr's talk.
 
 [![Build Status](https://travis-ci.org/rmonnet/simple-vm.svg?branch=master)](https://travis-ci.org/rmonnet/simple-vm)
 [![Coverage Status](https://coveralls.io/repos/github/rmonnet/simple-vm/badge.svg?branch=master)](https://coveralls.io/github/rmonnet/simple-vm?branch=master)
-\[![Go Report Card](https://goreportcard.com/badge/rmonnet/simple-vm)](http://goreportcard.com/report/rmonnet/simple-vm)
+[![Go Report Card](https://goreportcard.com/badge/rmonnet/simple-vm)](http://goreportcard.com/report/rmonnet/simple-vm)
 
 ## License
 

@@ -3,7 +3,7 @@ package vm
 const (
 	// IADD  adds the 2 integers on top of the stack
 	IADD = 1
-	// ISUB substracts the 2 integers on top of the stack
+	// ISUB subtracts the 2 integers on top of the stack
 	ISUB = 2
 	// IMUL multipies the 2 integers on top of the stack
 	IMUL = 3
