@@ -2,6 +2,8 @@
 
 A simple Virtual Machine (in go) based on Terence Parr's talk.
 
+[![Build Status](https://travis-ci.org/rmonnet/simple-vm.svg?branch=master)](https://travis-ci.org/rmonnet/simple-vm)
+
 ## License
 
 The project is published under the MIT license.
