@@ -1,9 +1,14 @@
+sudo: false
 language: go
 go: 
- - 1.10.2
- - release
- - tip
+  - 1.10.x
+  - release
+  - tip
 
+notifications:
+  email:
+    - rcmonnet@gmail.com
+ 
 before_install:
   - go get github.com/mattn/goveralls
 script:
